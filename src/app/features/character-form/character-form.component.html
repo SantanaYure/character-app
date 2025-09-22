@@ -1,0 +1,292 @@
+<div class="container mx-auto p-4 min-h-screen flex flex-col">
+  <!-- Loading Overlay -->
+  <app-loading-spinner *ngIf="isLoading" [overlay]="true" message="Salvando personagem..."></app-loading-spinner>
+
+  <!-- Header -->
+  <app-page-header 
+    [title]="formTitle" 
+    [showBackButton]="true"
+    (backClicked)="onBack()">
+  </app-page-header>
+
+  <!-- Form -->
+  <form [formGroup]="characterForm" class="flex-1 pb-20 animate-fade-in" (ngSubmit)="onSave()">
+    <!-- Image and Basic Info -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+      <!-- Image Upload -->
+      <div class="lg:col-span-1">
+        <div class="bg-primary-secondary p-6 rounded-lg">
+          <label class="block font-bold mb-3 text-primary-text">Imagem do Personagem</label>
+          
+          <!-- Image Preview -->
+          <div class="relative mb-4">
+            <div *ngIf="imagePreview; else noImagePreview" 
+                 class="w-full h-64 rounded-lg overflow-hidden border-2 border-primary-accent">
+              <img [src]="imagePreview" alt="Preview" class="w-full h-full object-cover">
+            </div>
+            
+            <ng-template #noImagePreview>
+              <div class="w-full h-64 bg-primary-bg rounded-lg border-2 border-dashed border-primary-accent flex items-center justify-center">
+                <div class="text-center">
+                  <svg class="w-12 h-12 mx-auto mb-2 text-primary-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                    </path>
+                  </svg>
+                  <p class="text-primary-light-gray text-sm">Clique para adicionar imagem</p>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+          
+          <!-- File Input -->
+          <input 
+            type="file" 
+            accept="image/*" 
+            class="w-full text-primary-text file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-accent file:text-primary-text hover:file:bg-primary-secondary transition-colors"
+            (change)="onImageSelected($event)">
+        </div>
+      </div>
+
+      <!-- Basic Info -->
+      <div class="lg:col-span-2 space-y-4">
+        <!-- Required Fields -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold mb-2 text-primary-text">
+              Nome do Criador *
+            </label>
+            <input 
+              type="text" 
+              formControlName="creatorName"
+              class="w-full p-3 bg-primary-accent rounded-lg text-primary-text border-2 border-transparent focus:border-primary-light-gray focus:outline-none transition-colors"
+              placeholder="Seu nome">
+          </div>
+          
+          <div>
+            <label class="block font-bold mb-2 text-primary-text">
+              Nome do Personagem *
+            </label>
+            <input 
+              type="text" 
+              formControlName="characterName"
+              class="w-full p-3 bg-primary-accent rounded-lg text-primary-text border-2 border-transparent focus:border-primary-light-gray focus:outline-none transition-colors"
+              placeholder="Nome do personagem">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold mb-2 text-primary-text">
+            Cenário *
+          </label>
+          <input 
+            type="text" 
+            formControlName="scenario"
+            class="w-full p-3 bg-primary-accent rounded-lg text-primary-text border-2 border-transparent focus:border-primary-light-gray focus:outline-none transition-colors"
+            placeholder="Nome do cenário/campanha">
+        </div>
+
+        <!-- Optional Fields -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block font-bold mb-2 text-primary-text">Idade</label>
+            <input 
+              type="text" 
+              formControlName="age"
+              class="w-full p-3 bg-primary-accent rounded-lg text-primary-text border-2 border-transparent focus:border-primary-light-gray focus:outline-none transition-colors"
+              placeholder="Ex: 25">
+          </div>
+          
+          <div>
+            <label class="block font-bold mb-2 text-primary-text">Altura</label>
+            <input 
+              type="text" 
+              formControlName="height"
+              class="w-full p-3 bg-primary-accent rounded-lg text-primary-text border-2 border-transparent focus:border-primary-light-gray focus:outline-none transition-colors"
+              placeholder="Ex: 1.80m">
+          </div>
+          
+          <div>
+            <label class="block font-bold mb-2 text-primary-text">Peso</label>
+            <input 
+              type="text" 
+              formControlName="weight"
+              class="w-full p-3 bg-primary-accent rounded-lg text-primary-text border-2 border-transparent focus:border-primary-light-gray focus:outline-none transition-colors"
+              placeholder="Ex: 75kg">
+          </div>
+          
+          <div>
+            <label class="block font-bold mb-2 text-primary-text">Função</label>
+            <input 
+              type="text" 
+              formControlName="role"
+              class="w-full p-3 bg-primary-accent rounded-lg text-primary-text border-2 border-transparent focus:border-primary-light-gray focus:outline-none transition-colors"
+              placeholder="Ex: Guerreiro">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Abilities Section -->
+    <div class="bg-primary-secondary p-6 rounded-lg mb-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-primary-text">Habilidades</h3>
+        <button 
+          type="button"
+          class="bg-primary-accent text-primary-text px-4 py-2 rounded-lg hover:bg-primary-secondary transition-colors flex items-center"
+          (click)="addAbility()">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Adicionar Habilidade
+        </button>
+      </div>
+
+      <!-- Abilities List -->
+      <div formArrayName="abilities" class="space-y-4">
+        <div *ngFor="let ability of abilitiesArray.controls; let i = index" 
+             [formGroupName]="i"
+             class="bg-primary-bg p-4 rounded-lg border border-primary-accent">
+          
+          <div class="flex justify-between items-start mb-3">
+            <h4 class="text-lg font-semibold text-primary-text">Habilidade {{ i + 1 }}</h4>
+            <button 
+              type="button"
+              class="text-red-400 hover:text-red-300 transition-colors"
+              (click)="removeAbility(i)">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block font-medium mb-2 text-primary-light-gray">Nome *</label>
+              <input 
+                type="text" 
+                formControlName="name"
+                class="w-full p-2 bg-primary-accent rounded text-primary-text border border-transparent focus:border-primary-light-gray focus:outline-none transition-colors"
+                placeholder="Nome da habilidade">
+            </div>
+            
+            <div class="md:col-span-2">
+              <label class="block font-medium mb-2 text-primary-light-gray">Descrição</label>
+              <textarea 
+                formControlName="description"
+                rows="2"
+                class="w-full p-2 bg-primary-accent rounded text-primary-text border border-transparent focus:border-primary-light-gray focus:outline-none transition-colors resize-none"
+                placeholder="Descrição da habilidade"></textarea>
+            </div>
+            
+            <div class="md:col-span-3">
+              <label class="block font-medium mb-2 text-primary-light-gray">Efeito</label>
+              <textarea 
+                formControlName="effect"
+                rows="2"
+                class="w-full p-2 bg-primary-accent rounded text-primary-text border border-transparent focus:border-primary-light-gray focus:outline-none transition-colors resize-none"
+                placeholder="Efeito da habilidade"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="abilitiesArray.length === 0" class="text-center py-8 text-primary-light-gray">
+        <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M13 10V3L4 14h7v7l9-11h-7z">
+          </path>
+        </svg>
+        <p>Nenhuma habilidade adicionada</p>
+        <p class="text-sm">Clique em "Adicionar Habilidade" para começar</p>
+      </div>
+    </div>
+
+    <!-- Character Details -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div>
+        <label class="block font-bold mb-2 text-primary-text">Características Físicas</label>
+        <textarea 
+          formControlName="physicalChars"
+          rows="4"
+          class="w-full p-3 bg-primary-accent rounded-lg text-primary-text border-2 border-transparent focus:border-primary-light-gray focus:outline-none transition-colors resize-none"
+          placeholder="Descreva a aparência física do personagem..."></textarea>
+      </div>
+      
+      <div>
+        <label class="block font-bold mb-2 text-primary-text">Personalidade</label>
+        <textarea 
+          formControlName="personality"
+          rows="4"
+          class="w-full p-3 bg-primary-accent rounded-lg text-primary-text border-2 border-transparent focus:border-primary-light-gray focus:outline-none transition-colors resize-none"
+          placeholder="Descreva a personalidade do personagem..."></textarea>
+      </div>
+      
+      <div>
+        <label class="block font-bold mb-2 text-primary-text">Motivação</label>
+        <textarea 
+          formControlName="motivation"
+          rows="4"
+          class="w-full p-3 bg-primary-accent rounded-lg text-primary-text border-2 border-transparent focus:border-primary-light-gray focus:outline-none transition-colors resize-none"
+          placeholder="Quais são as motivações do personagem..."></textarea>
+      </div>
+    </div>
+
+    <!-- History Section -->
+    <div class="bg-primary-secondary p-6 rounded-lg mb-6">
+      <h3 class="text-xl font-bold text-primary-text mb-4">História</h3>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block font-medium mb-2 text-primary-light-gray">Texto da História</label>
+          <textarea 
+            formControlName="historyContent"
+            rows="6"
+            class="w-full p-3 bg-primary-accent rounded-lg text-primary-text border-2 border-transparent focus:border-primary-light-gray focus:outline-none transition-colors resize-none"
+            placeholder="Cole o texto da história aqui ou use o botão abaixo para carregar um arquivo..."></textarea>
+        </div>
+        
+        <div>
+          <label class="block font-medium mb-2 text-primary-light-gray">Ou carregue um arquivo .txt</label>
+          <input 
+            type="file" 
+            accept=".txt"
+            class="w-full text-primary-text file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-accent file:text-primary-text hover:file:bg-primary-secondary transition-colors"
+            (change)="onHistoryFileSelected($event)">
+          <p class="text-sm text-primary-light-gray mt-2">
+            Recomendado: Use arquivos .txt para melhor compatibilidade
+          </p>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- Fixed Action Bar -->
+  <div class="fixed bottom-0 left-0 right-0 bg-primary-bg border-t border-primary-border p-4 flex justify-end space-x-4 z-30">
+    <button 
+      type="button"
+      class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+      (click)="onDiscard()">
+      Descartar
+    </button>
+    
+    <button 
+      type="button"
+      class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      (click)="onPreview()">
+      Pré-visualizar
+    </button>
+    
+    <button 
+      type="button"
+      class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      [disabled]="characterForm.invalid || isLoading"
+      (click)="onSave()">
+      <svg *ngIf="isLoading" class="w-4 h-4 mr-2 animate-spin inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+      </svg>
+      {{ isLoading ? 'Salvando...' : 'Salvar' }}
+    </button>
+  </div>
+</div>

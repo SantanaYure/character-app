@@ -1,0 +1,31 @@
+node_modules# Compilados, pacotes e cache
+/dist
+/www
+/node_modules
+/.angular/
+*.log
+
+# Arquivos de IDEs e Editores de Código
+# É muito importante para não enviar suas configurações pessoais para o repositório.
+.vscode/
+.idea/
+*.project
+*.classpath
+*.c9/
+*.launch
+*.sublime-*
+*.tmproj
+.yarn-integrity
+
+# Arquivos de Sistema Operacional
+.DS_Store
+Thumbs.db
+
+# Relatórios de Testes
+/coverage/
+/junit/
+
+# Arquivos de ambiente com segredos (MUITO IMPORTANTE)
+# Se você criar um arquivo de ambiente para desenvolvimento local com senhas ou chaves de API,
+# NUNCA o envie para o repositório.
+# src/environments/environment.local.ts

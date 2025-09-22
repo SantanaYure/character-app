@@ -1,0 +1,91 @@
+// Animações para transições de abas
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+// Estilo para o conteúdo da história
+.history-content {
+  font-family: "Times New Roman", serif;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+// Efeitos hover para botões
+button {
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+// Estilo para as abas
+nav button {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: transparent;
+    transition: background-color 0.3s ease;
+  }
+  
+  &:hover::after {
+    background: rgba(68, 57, 84, 0.5);
+  }
+}
+
+// Scrollbar personalizada para o conteúdo das abas
+.max-h-64 {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #221d2a;
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #443954;
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: #eaeaea;
+  }
+}
+
+// Responsividade aprimorada
+@media (max-width: 1024px) {
+  .lg\\:flex-row {
+    flex-direction: column;
+  }
+  
+  .lg\\:w-1\\/3, .lg\\:w-2\\/3 {
+    width: 100%;
+  }
+}
+
+// Micro-interações para habilidades
+.bg-primary-bg {
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: #332b3f;
+    transform: translateX(4px);
+  }
+}

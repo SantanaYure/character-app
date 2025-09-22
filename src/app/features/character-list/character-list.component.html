@@ -1,0 +1,108 @@
+<div class="container mx-auto p-4 min-h-screen flex flex-col">
+  <!-- Header -->
+  <app-page-header 
+    [title]="scenarioName" 
+    [showBackButton]="true"
+    backButtonText="← Voltar ao Dashboard"
+    (backClicked)="onBackToDashboard()">
+  </app-page-header>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex-1 flex items-center justify-center">
+    <app-loading-spinner size="large" message="Carregando personagens..."></app-loading-spinner>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && characters.length === 0" 
+       class="flex-1 flex flex-col items-center justify-center text-center animate-fade-in">
+    <div class="bg-primary-secondary rounded-lg p-8 max-w-md">
+      <svg class="w-16 h-16 mx-auto mb-4 text-primary-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+        </path>
+      </svg>
+      <h3 class="text-xl font-semibold text-primary-text mb-2">Nenhum personagem neste cenário</h3>
+      <p class="text-primary-light-gray mb-4">Crie o primeiro personagem para este cenário.</p>
+      <button 
+        type="button"
+        class="bg-primary-accent text-primary-text px-6 py-2 rounded-lg hover:bg-primary-secondary transition-colors"
+        (click)="onCreateCharacter()">
+        Criar Personagem
+      </button>
+    </div>
+  </div>
+
+  <!-- Characters Grid -->
+  <section *ngIf="!isLoading && characters.length > 0" 
+           class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
+    <article 
+      *ngFor="let character of characters; trackBy: trackByCharacter; let i = index"
+      class="bg-primary-secondary rounded-lg overflow-hidden cursor-pointer hover:bg-primary-accent transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl animate-slide-up"
+      (click)="onCharacterClick(character.id)">
+      
+      <!-- Character Image -->
+      <div class="relative h-48 bg-primary-bg overflow-hidden">
+        <img 
+          *ngIf="character.image; else noImage"
+          [src]="character.image" 
+          [alt]="character.characterName"
+          class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+        
+        <ng-template #noImage>
+          <div class="w-full h-full flex items-center justify-center">
+            <svg class="w-16 h-16 text-primary-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+              </path>
+            </svg>
+          </div>
+        </ng-template>
+        
+        <!-- Overlay Gradient -->
+        <div class="absolute inset-0 bg-gradient-to-t from-primary-bg via-transparent to-transparent opacity-60"></div>
+      </div>
+      
+      <!-- Character Info -->
+      <div class="p-4">
+        <h3 class="text-lg font-bold text-primary-text mb-1 truncate">
+          {{ character.characterName }}
+        </h3>
+        
+        <p class="text-sm text-primary-light-gray mb-2">
+          Criador: {{ character.creatorName }}
+        </p>
+        
+        <div class="flex items-center justify-between text-xs text-primary-light-gray">
+          <span *ngIf="character.role" class="bg-primary-accent px-2 py-1 rounded">
+            {{ character.role }}
+          </span>
+          
+          <div class="flex items-center space-x-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
+              </path>
+            </svg>
+            <span>{{ character.updatedAt | date:'dd/MM/yyyy' }}</span>
+          </div>
+        </div>
+        
+        <!-- Abilities Count -->
+        <div *ngIf="character.abilities.length > 0" class="mt-2 flex items-center space-x-1 text-xs text-primary-light-gray">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M13 10V3L4 14h7v7l9-11h-7z">
+            </path>
+          </svg>
+          <span>{{ character.abilities.length }} habilidade{{ character.abilities.length !== 1 ? 's' : '' }}</span>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- FAB Button -->
+  <app-fab-button 
+    icon="plus" 
+    (clicked)="onCreateCharacter()">
+  </app-fab-button>
+</div>

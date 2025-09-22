@@ -1,0 +1,17 @@
+<header class="mb-8 animate-fade-in">
+  <button 
+    *ngIf="showBackButton"
+    type="button"
+    class="text-primary-light-gray hover:text-primary-text mb-4 transition-colors duration-200 flex items-center space-x-2"
+    (click)="onBackClick()">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+    </svg>
+    <span>{{ backButtonText }}</span>
+  </button>
+  
+  <div class="text-center" [class.text-left]="showBackButton">
+    <h1 class="text-3xl font-bold text-primary-text mb-2">{{ title }}</h1>
+    <p *ngIf="subtitle" class="text-primary-light-gray">{{ subtitle }}</p>
+  </div>
+</header>

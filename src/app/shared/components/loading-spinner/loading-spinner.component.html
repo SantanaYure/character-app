@@ -1,0 +1,19 @@
+<div 
+  class="flex items-center justify-center"
+  [class.fixed]="overlay"
+  [class.inset-0]="overlay"
+  [class.bg-black]="overlay"
+  [class.bg-opacity-50]="overlay"
+  [class.z-50]="overlay">
+  
+  <div class="flex flex-col items-center space-y-3">
+    <div 
+      class="animate-spin rounded-full border-2 border-primary-accent border-t-transparent"
+      [class]="spinnerClasses">
+    </div>
+    
+    <p *ngIf="message" class="text-primary-light-gray text-sm">
+      {{ message }}
+    </p>
+  </div>
+</div>
